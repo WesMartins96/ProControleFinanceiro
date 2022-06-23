@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ControleFinanceiro.API.Interfaces;
 using ControleFinanceiro.API.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -13,11 +14,11 @@ namespace ControleFinanceiro.API.Controllers
     [ApiController]
     public class CategoriasController : ControllerBase
     {
-        private readonly Contexto _context;
+        private readonly ICategoriaRepositorio _categoriaRepositorio;
 
-        public CategoriasController(Contexto context)
+        public CategoriasController(ICategoriaRepositorio categoriaRepositorio)
         {
-            _context = context;
+            _categoriaRepositorio = categoriaRepositorio;
         }
 
 
@@ -25,14 +26,14 @@ namespace ControleFinanceiro.API.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Categoria>>> GetCategorias()
         {
-            return await _context.Categorias.Include(c => c.Tipo).ToListAsync();
+            return await _categoriaRepositorio.PegarTodos().ToListAsync();
         }
 
         //Pegar pelo id
         [HttpGet("{id}")]
         public async Task<ActionResult<Categoria>> GetCategoria(int id)
         {
-            var categoria = await _context.Categorias.FindAsync(id);
+            var categoria = await _categoriaRepositorio.PegarPeloId(id);
 
             if(categoria == null)
             {
@@ -50,57 +51,50 @@ namespace ControleFinanceiro.API.Controllers
                 return BadRequest();
             }
 
-            _context.Entry(categoria).State = EntityState.Modified;
-
-            try
+            if(ModelState.IsValid)
             {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if(!CategoriaExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                await _categoriaRepositorio.Atualizar(categoria);
+                
+                return Ok(new {
+                    mensagem = $"Categoria {categoria.Nome} atualizada com sucesso"
+                });
             }
 
-            return NoContent();
+            return BadRequest(ModelState);
         }
 
         //Inserir Registros no Banco de dados
         [HttpPost]
         public async Task<ActionResult<Categoria>> PostCategoria(Categoria categoria)
         {
-            _context.Categorias.Add(categoria);
-            await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetCategoria", new {id = categoria.CategoriaId}, categoria);
+            if(ModelState.IsValid)
+            {
+                await _categoriaRepositorio.Inserir(categoria);
+
+                return Ok(new {
+                    mensagem = $"Categoria {categoria.Nome} cadastrada com sucesso"
+                });
+            }
+
+            return BadRequest(ModelState);
         }
 
         //Deletar Registros
         [HttpDelete("{id}")]
         public async Task<ActionResult<Categoria>> DeleteCategoria(int id)
         {
-            var categoria = await _context.Categorias.FindAsync(id);
+            var categoria = await _categoriaRepositorio.PegarPeloId(id);
             if(categoria == null)
             {
                 return NotFound();
             }
 
-            _context.Categorias.Remove(categoria);
-            await _context.SaveChangesAsync();
+            await _categoriaRepositorio.Excluir(id);
 
-            return categoria;
+            return Ok(new {
+                    mensagem = $"Categoria {categoria.Nome} excluida com sucesso"
+                });
         }
-
-        private bool CategoriaExists(int id)
-        {
-            return _context.Categorias.Any(e => e.CategoriaId == id);
-        }
-        
     }
 }

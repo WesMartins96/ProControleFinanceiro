@@ -8,7 +8,7 @@ import { Tipo } from '../Models/Tipo';
 })
 export class TiposService {
 
-  url: string = 'api/tipos';
+  url: string = 'https://localhost:5001/api/tipos';
 
   constructor(private http: HttpClient) { }
 

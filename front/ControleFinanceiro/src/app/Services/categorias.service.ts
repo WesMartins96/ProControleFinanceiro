@@ -1,7 +1,8 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Categoria } from '../Models/Categoria';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+
 
 const httpOptions = {
   headers: new HttpHeaders ({
@@ -14,7 +15,7 @@ const httpOptions = {
 })
 export class CategoriasService {
 
-  url: string = 'api/categorias';
+  url: string = 'https://localhost:5001/api/categorias';
 
   constructor(private http: HttpClient) { }
 

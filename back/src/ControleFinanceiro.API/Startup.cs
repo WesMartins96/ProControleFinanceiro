@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using ControleFinanceiro.API.Interfaces;
 using ControleFinanceiro.API.Models;
+using ControleFinanceiro.API.Repositorios;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -35,6 +37,9 @@ namespace ControleFinanceiro.API
 
             // Expecificar as configurações do Identity
             services.AddIdentity<Usuario, Funcao>().AddEntityFrameworkStores<Contexto>();
+
+            services.AddScoped<ICategoriaRepositorio, CategoriaRepositorio>();
+            services.AddScoped<ITipoRepositorio, TipoRepositorio>();
 
             //Fazer a ligação front -> back da aplicação
             services.AddCors();
@@ -90,7 +95,7 @@ namespace ControleFinanceiro.API
 
             //Configurar a SPA
             app.UseSpa( spa => {
-                spa.Options.SourcePath = Path.Combine(Directory.GetCurrentDirectory(), "ControleFinanceiro");
+                spa.Options.SourcePath = Path.Combine(Directory.GetCurrentDirectory(), "front/ControleFinanceiro");
             });
         }
     }
