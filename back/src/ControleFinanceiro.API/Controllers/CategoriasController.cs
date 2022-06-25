@@ -77,7 +77,7 @@ namespace ControleFinanceiro.API.Controllers
                 });
             }
 
-            return BadRequest(ModelState);
+            return BadRequest(categoria);
         }
 
         //Deletar Registros
@@ -95,6 +95,13 @@ namespace ControleFinanceiro.API.Controllers
             return Ok(new {
                     mensagem = $"Categoria {categoria.Nome} excluida com sucesso"
                 });
+        }
+
+        // Filtrar a lista de categoria
+        [HttpGet("FiltrarCategorias/{nomeCategoria}")]
+        public async Task<ActionResult<IEnumerable<Categoria>>> FiltrarCategorias(string nomeCategoria)
+        {
+            return await _categoriaRepositorio.FiltrarCategorias(nomeCategoria).ToListAsync();
         }
     }
 }

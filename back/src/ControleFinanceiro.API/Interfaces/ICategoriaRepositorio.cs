@@ -11,5 +11,8 @@ namespace ControleFinanceiro.API.Interfaces
         new IQueryable<Categoria> PegarTodos();
 
         new Task<Categoria> PegarPeloId(int id);
+
+        // Fazer filtro de categorias
+        IQueryable<Categoria> FiltrarCategorias(string nomeCategoria);
     }
 }

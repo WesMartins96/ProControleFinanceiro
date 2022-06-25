@@ -20,5 +20,7 @@ namespace ControleFinanceiro.API.Interfaces
         Task Excluir(string id);
         Task Excluir(int id);
 
+        Task Excluir(TEntity entity);
+
     }
 }

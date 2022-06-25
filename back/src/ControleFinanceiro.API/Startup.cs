@@ -6,6 +6,10 @@ using System.Threading.Tasks;
 using ControleFinanceiro.API.Interfaces;
 using ControleFinanceiro.API.Models;
 using ControleFinanceiro.API.Repositorios;
+using ControleFinanceiro.API.Validacoes;
+using ControleFinanceiro.API.ViewModels;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -38,8 +42,16 @@ namespace ControleFinanceiro.API
             // Expecificar as configurações do Identity
             services.AddIdentity<Usuario, Funcao>().AddEntityFrameworkStores<Contexto>();
 
+            // Registros das Interfaces e dos Repositorios
             services.AddScoped<ICategoriaRepositorio, CategoriaRepositorio>();
             services.AddScoped<ITipoRepositorio, TipoRepositorio>();
+            services.AddScoped<IFuncaoRepositorio, FuncaoRepositorio>();
+            services.AddScoped<IUsuarioRepositorio, UsuarioRepositorio>();
+
+            // Registros das classes que nos ajudaram nas validações
+            services.AddTransient<IValidator<Categoria>, CategoriaValidator>();
+            services.AddTransient<IValidator<FuncoesViewModel>, FuncoesViewModelValidator>();
+            services.AddTransient<IValidator<RegistroViewModel>, RegistroViewModelValidator>();
 
             //Fazer a ligação front -> back da aplicação
             services.AddCors();
@@ -50,8 +62,8 @@ namespace ControleFinanceiro.API
             });
 
 
-                                                    //Ignorar valores nulos e Ignorar referencias circulares
-            services.AddControllers().AddJsonOptions(opcoes => 
+                                  //Usando a biblioteca de validações    //Ignorar valores nulos e Ignorar referencias circulares
+            services.AddControllers().AddFluentValidation().AddJsonOptions(opcoes => 
             { opcoes.JsonSerializerOptions.IgnoreNullValues = true;})
             .AddNewtonsoftJson(opcoes => {
                 opcoes.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
