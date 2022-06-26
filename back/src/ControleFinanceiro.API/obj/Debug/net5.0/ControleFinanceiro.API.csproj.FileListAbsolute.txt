@@ -71,3 +71,4 @@ C:\Users\wesle\Desktop\ProControleFinanceiro\back\src\ControleFinanceiro.API\bin
 C:\Users\wesle\Desktop\ProControleFinanceiro\back\src\ControleFinanceiro.API\bin\Debug\net5.0\FluentValidation.dll
 C:\Users\wesle\Desktop\ProControleFinanceiro\back\src\ControleFinanceiro.API\bin\Debug\net5.0\FluentValidation.AspNetCore.dll
 C:\Users\wesle\Desktop\ProControleFinanceiro\back\src\ControleFinanceiro.API\bin\Debug\net5.0\FluentValidation.DependencyInjectionExtensions.dll
+C:\Users\wesle\Desktop\ProControleFinanceiro\back\src\ControleFinanceiro.API\bin\Debug\net5.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll

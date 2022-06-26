@@ -21,6 +21,10 @@ namespace ControleFinanceiro.API.Interfaces
                                     //Bool que será usado para lembrar ou não do usuario
         Task LogarUsuario(Usuario usuario, bool lembrar);
 
+        Task<Usuario> PegarUsuarioPeloEmail(string email);
+
+        Task<IList<string>> PegarFuncoesUsuario(Usuario usuario);
+
 
     }
 }

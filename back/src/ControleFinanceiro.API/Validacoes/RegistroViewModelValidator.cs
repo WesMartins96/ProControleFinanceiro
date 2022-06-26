@@ -15,7 +15,7 @@ namespace ControleFinanceiro.API.Validacoes
             RuleFor(r => r.NomeUsuario)
                     .NotNull().WithMessage("Preencha o nome do usuario")
                     .NotEmpty().WithMessage("Preencha o nome do usuario")
-                    .MinimumLength(1).WithMessage("Use mais caracteres")
+                    .MinimumLength(6).WithMessage("Use mais caracteres")
                     .MaximumLength(50).WithMessage("Use menos caracteres");
 
 

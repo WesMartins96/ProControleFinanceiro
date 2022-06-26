@@ -2,7 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
+using ControleFinanceiro.API.Extensions;
 using ControleFinanceiro.API.Interfaces;
 using ControleFinanceiro.API.Models;
 using ControleFinanceiro.API.Repositorios;
@@ -10,6 +12,7 @@ using ControleFinanceiro.API.Validacoes;
 using ControleFinanceiro.API.ViewModels;
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -19,6 +22,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 
 namespace ControleFinanceiro.API
@@ -41,6 +45,7 @@ namespace ControleFinanceiro.API
 
             // Expecificar as configurações do Identity
             services.AddIdentity<Usuario, Funcao>().AddEntityFrameworkStores<Contexto>();
+            services.ConfigurarSenhaUsuario();
 
             // Registros das Interfaces e dos Repositorios
             services.AddScoped<ICategoriaRepositorio, CategoriaRepositorio>();
@@ -52,6 +57,7 @@ namespace ControleFinanceiro.API
             services.AddTransient<IValidator<Categoria>, CategoriaValidator>();
             services.AddTransient<IValidator<FuncoesViewModel>, FuncoesViewModelValidator>();
             services.AddTransient<IValidator<RegistroViewModel>, RegistroViewModelValidator>();
+            services.AddTransient<IValidator<LoginViewModel>, LoginViewModelValidator>();
 
             //Fazer a ligação front -> back da aplicação
             services.AddCors();
@@ -60,6 +66,29 @@ namespace ControleFinanceiro.API
             services.AddSpaStaticFiles(diretorio => {
                 diretorio.RootPath = "front/ControleFinanceiro";
             });
+
+
+            var key = Encoding.ASCII.GetBytes(Settings.ChaveSecreta);
+
+            services.AddAuthentication(opcoes => {
+                                                // Para usar o token JWT é necessario baixar o pacote Microsoft.AspNetCore.Authentication.JwtBearer
+                                                // Para usar o token JWT é necessario baixar o pacote Microsoft.IdentityModel.Tokens 
+                opcoes.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                opcoes.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+                // Adicionar as informações do Bearer
+                .AddJwtBearer(opcoes => {
+                    opcoes.RequireHttpsMetadata = false;
+                    opcoes.SaveToken = true;
+                    //Opcoes de validacoes do Token
+                    opcoes.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = new SymmetricSecurityKey(key),
+                        ValidateIssuer = false,
+                        ValidateAudience = false
+                    };
+                });
 
 
                                   //Usando a biblioteca de validações    //Ignorar valores nulos e Ignorar referencias circulares
@@ -88,6 +117,9 @@ namespace ControleFinanceiro.API
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            // Authentication tem que vir sempre antes do Authorization senao, nao funciona
+            app.UseAuthentication();
 
             app.UseAuthorization();
 

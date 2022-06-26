@@ -66,11 +66,37 @@ namespace ControleFinanceiro.API.Repositorios
             }
         }
 
+        public async Task<IList<string>> PegarFuncoesUsuario(Usuario usuario)
+        {
+            try
+            {
+                return await _gerenciadorUsuarios.GetRolesAsync(usuario);
+            }
+            catch (Exception ex)
+            {
+                
+                throw ex;
+            }
+        }
+
         public async Task<int> PegarQuatidadeUsuariosRegistrados()
         {
             try
             {
                 return await _contexto.Usuarios.CountAsync();
+            }
+            catch (Exception ex)
+            {
+                
+                throw ex;
+            }
+        }
+
+        public async Task<Usuario> PegarUsuarioPeloEmail(string email)
+        {
+            try
+            {
+                return await _gerenciadorUsuarios.FindByEmailAsync(email);
             }
             catch (Exception ex)
             {

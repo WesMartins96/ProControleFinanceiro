@@ -33,7 +33,22 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { DialogExclusaoFuncoesComponent, ListagemFuncoesComponent } from './components/Funcao/listagem-funcoes/listagem-funcoes.component';
 import { NovaFuncaoComponent } from './components/Funcao/nova-funcao/nova-funcao.component';
 import { AtualizarFuncaoComponent } from './components/Funcao/atualizar-funcao/atualizar-funcao.component';
+import { RegistrarUsuarioComponent } from './components/Usuario/Registro/registrar-usuario/registrar-usuario.component';
 
+import { FlexLayoutModule } from '@angular/flex-layout';
+import { NgxMaskModule } from 'ngx-mask';
+import { LoginUsuarioComponent } from './components/Usuario/Login/login-usuario/login-usuario.component';
+import { JwtModule } from '@auth0/angular-jwt';
+import { DashboardComponent } from './components/Dashboard/dashboard/dashboard.component';
+import { HeaderComponent } from './components/Dashboard/header/header.component';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatListModule } from '@angular/material/list'
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { AuthGuardService } from './Services/auth-guard.service';
+
+export function PegarTokenUsuario(){
+  return localStorage.getItem("TokenUsuarioLogado");
+}
 
 
 
@@ -48,7 +63,11 @@ import { AtualizarFuncaoComponent } from './components/Funcao/atualizar-funcao/a
     ListagemFuncoesComponent,
     NovaFuncaoComponent,
     AtualizarFuncaoComponent,
-    DialogExclusaoFuncoesComponent
+    DialogExclusaoFuncoesComponent,
+    RegistrarUsuarioComponent,
+    LoginUsuarioComponent,
+    DashboardComponent,
+    HeaderComponent
   ],
   imports: [
     BrowserModule,
@@ -72,13 +91,27 @@ import { AtualizarFuncaoComponent } from './components/Funcao/atualizar-funcao/a
     MatSortModule,
     MatSnackBarModule,
     MatProgressBarModule,
+    MatSidenavModule,
+    MatListModule,
+    MatToolbarModule,
+    FlexLayoutModule,
+    NgxMaskModule.forRoot(),
+    JwtModule.forRoot({
+      config: {
+        tokenGetter: PegarTokenUsuario,
+        allowedDomains: ['localhost:5000'],
+        disallowedRoutes: []
+      }
+    })
 
   ],
+
   providers: [
     TiposService,
     CategoriasService,
     FuncoesService,
-    HttpClientModule
+    HttpClientModule,
+    AuthGuardService
 
   ],
   bootstrap: [AppComponent]

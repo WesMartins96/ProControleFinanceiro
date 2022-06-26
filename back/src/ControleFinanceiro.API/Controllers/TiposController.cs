@@ -4,11 +4,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using ControleFinanceiro.API.Interfaces;
 using ControleFinanceiro.API.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace ControleFinanceiro.API.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class TiposController : ControllerBase

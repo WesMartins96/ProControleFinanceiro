@@ -6,8 +6,9 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 const httpOptions = {
   headers: new HttpHeaders ({
-    'Content-Type' : 'application/json'
-  })
+    'Content-Type' : 'application/json',
+    'Authorization' : `Bearer ${localStorage.getItem('TokenUsuarioLogado')}`
+  }),
 };
 
 @Injectable({
@@ -30,6 +31,7 @@ export class CategoriasService {
 
   //Inserir no Banco de dados
   NovaCategoria(categoria: Categoria) : Observable<any>{
+    console.log(localStorage.getItem('TokenUsuarioLogado'));
     return this.http.post<Categoria>(this.url, categoria, httpOptions)
   }
 
