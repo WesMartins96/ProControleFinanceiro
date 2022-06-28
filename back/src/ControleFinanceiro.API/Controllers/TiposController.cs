@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ControleFinanceiro.API.Controllers
 {
-    [Authorize]
+    
     [Route("api/[controller]")]
     [ApiController]
     public class TiposController : ControllerBase

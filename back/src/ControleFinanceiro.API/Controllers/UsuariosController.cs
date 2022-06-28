@@ -83,7 +83,7 @@ namespace ControleFinanceiro.API.Controllers
 
 
                 // o primeiro usuario sempre será o admin
-                if (await _usuarioRepositorio.PegarQuatidadeUsuariosRegistrados() > 0)
+                if(await _usuarioRepositorio.PegarQuatidadeUsuariosRegistrados() > 0)
                 {
                     funcaoUsuario = "Usuario";
                 }
@@ -100,11 +100,12 @@ namespace ControleFinanceiro.API.Controllers
                     var token = TokenService.GerarToken(usuario, funcaoUsuario);
                     await _usuarioRepositorio.LogarUsuario(usuario, false);
 
-                    return Ok(new{
+                    return Ok(new
+                    {
                         emailUsuarioLogado = usuario.Email,
                         usuarioId = usuario.Id,
                         tokenUsuarioLogado = token
-                    });                    
+                    });
                 }
                 // se nao for criado com sucesso
                 else

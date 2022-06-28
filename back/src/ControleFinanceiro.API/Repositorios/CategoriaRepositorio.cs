@@ -54,5 +54,18 @@ namespace ControleFinanceiro.API.Repositorios
                 throw ex;
             }
         }
+
+        public IQueryable<Categoria> PegarCategoriasPeloTipo(string tipo)
+        {
+            try
+            {
+                return _contexto.Categorias.Include(c => c.Tipo).Where(c => c.Tipo.Nome == tipo);
+            }
+            catch (Exception ex)
+            {
+                
+                throw ex;
+            }
+        }
     }
 }

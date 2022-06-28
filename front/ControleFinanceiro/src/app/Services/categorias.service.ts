@@ -5,49 +5,53 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 
 const httpOptions = {
-  headers: new HttpHeaders ({
-    'Content-Type' : 'application/json',
-    'Authorization' : `Bearer ${localStorage.getItem('TokenUsuarioLogado')}`
+  headers: new HttpHeaders({
+    'Content-Type': 'application/json',
+    'Authorization': `Bearer ${localStorage.getItem('TokenUsuarioLogado')}`
   }),
 };
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class CategoriasService {
+  url = 'https://localhost:5001/api/Categorias';
 
-  url: string = 'https://localhost:5001/api/categorias';
+  constructor(private http: HttpClient) {}
 
-  constructor(private http: HttpClient) { }
-
-  PegarTodos() : Observable<Categoria[]>{
+  PegarTodos(): Observable<Categoria[]> {
     return this.http.get<Categoria[]>(this.url);
   }
 
-  PegarCategoriaPeloId(categoriaId: number) : Observable<Categoria>{
+  PegarCategoriaPeloId(categoriaId: number): Observable<Categoria> {
     const apiUrl = `${this.url}/${categoriaId}`;
     return this.http.get<Categoria>(apiUrl);
   }
 
-  //Inserir no Banco de dados
-  NovaCategoria(categoria: Categoria) : Observable<any>{
-    console.log(localStorage.getItem('TokenUsuarioLogado'));
-    return this.http.post<Categoria>(this.url, categoria, httpOptions)
+  NovaCategoria(categoria: Categoria): Observable<any> {
+    return this.http.post<Categoria>(this.url, categoria, httpOptions);
   }
 
-  //Atualizar
-  AtualizarCategoria(categoriaId: number, categoria: Categoria): Observable<any>{
+  AtualizarCategoria(
+    categoriaId: number,
+    categoria: Categoria
+  ): Observable<any> {
     const apiUrl = `${this.url}/${categoriaId}`;
     return this.http.put<Categoria>(apiUrl, categoria, httpOptions);
   }
 
-  ExcluirCategoria(categoriaId: number): Observable<any>{
+  ExcluirCategoria(categoriaId: number): Observable<any> {
     const apiUrl = `${this.url}/${categoriaId}`;
     return this.http.delete<number>(apiUrl, httpOptions);
   }
 
-  FiltrarCategorias(nomeCategoria: string): Observable<Categoria[]>{
+  FiltrarCategorias(nomeCategoria: string): Observable<Categoria[]> {
     const apiUrl = `${this.url}/FiltrarCategorias/${nomeCategoria}`;
+    return this.http.get<Categoria[]>(apiUrl);
+  }
+
+  FiltrarCategoriasDespesas(): Observable<Categoria[]>{
+    const apiUrl = `${this.url}/FiltrarCategoriasDespesas`;
     return this.http.get<Categoria[]>(apiUrl);
   }
 }

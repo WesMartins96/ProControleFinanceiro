@@ -13,7 +13,7 @@ namespace ControleFinanceiro.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = "Administrador")]
+    
     public class FuncoesController : ControllerBase
     {
         private readonly IFuncaoRepositorio _funcaoRepositorio;

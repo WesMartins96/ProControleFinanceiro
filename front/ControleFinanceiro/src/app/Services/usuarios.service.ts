@@ -28,10 +28,10 @@ export class UsuariosService {
     return this.http.post<any>(apiUrl, formData);
   }
 
-  RegistrarUsuario(dadosResistro: DadosRegistros): Observable<any>
+  RegistrarUsuario(dadosRegistro: DadosRegistros): Observable<any>
   {
     const apiUrl = `${this.url}/RegistrarUsuario`;
-    return this.http.post<DadosRegistros>(apiUrl, dadosResistro);
+    return this.http.post<DadosRegistros>(apiUrl, dadosRegistro);
   }
 
   LogarUsuario(dadosLogin: DadosLogin): Observable<any>{

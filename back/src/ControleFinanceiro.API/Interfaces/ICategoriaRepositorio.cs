@@ -14,5 +14,7 @@ namespace ControleFinanceiro.API.Interfaces
 
         // Fazer filtro de categorias
         IQueryable<Categoria> FiltrarCategorias(string nomeCategoria);
+
+        IQueryable<Categoria> PegarCategoriasPeloTipo(string tipo);
     }
 }

@@ -166,16 +166,16 @@ namespace ControleFinanceiro.API.Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "56f217d7-603a-45bb-920e-61a4574992f9",
-                            ConcurrencyStamp = "ba8fc3ce-8125-4853-8fc1-0a8a2a60759e",
+                            Id = "d08a651b-332a-4ff5-a93c-261f828ea357",
+                            ConcurrencyStamp = "a71fd915-5379-4964-b77c-ce87370c52ed",
                             Descricao = "Administrador do sistema",
                             Name = "Administrador",
                             NormalizedName = "ADMINISTRADOR"
                         },
                         new
                         {
-                            Id = "f800f34b-d1d1-4e7d-86c0-966cfa80c68f",
-                            ConcurrencyStamp = "4918c5d4-8613-42cc-a6d8-51ac864362ce",
+                            Id = "229f37e4-1085-4084-8d1a-49e468795020",
+                            ConcurrencyStamp = "39cb9a48-8c7c-4717-8271-36ccbd52e6f5",
                             Descricao = "Usuario do sistema",
                             Name = "Usuario",
                             NormalizedName = "USUARIO"

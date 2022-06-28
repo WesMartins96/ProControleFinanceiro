@@ -45,22 +45,29 @@ namespace ControleFinanceiro.API
 
             // Expecificar as configurações do Identity
             services.AddIdentity<Usuario, Funcao>().AddEntityFrameworkStores<Contexto>();
+
             services.ConfigurarSenhaUsuario();
 
             // Registros das Interfaces e dos Repositorios
+            services.AddScoped<ICartaoRepositorio, CartaoRepositorio>();
             services.AddScoped<ICategoriaRepositorio, CategoriaRepositorio>();
             services.AddScoped<ITipoRepositorio, TipoRepositorio>();
             services.AddScoped<IFuncaoRepositorio, FuncaoRepositorio>();
             services.AddScoped<IUsuarioRepositorio, UsuarioRepositorio>();
+            services.AddScoped<IDespesaRepositorio, DespesaRepositorio>();
+            services.AddScoped<IMesRepositorio, MesRepositorio>();
 
             // Registros das classes que nos ajudaram nas validações
             services.AddTransient<IValidator<Categoria>, CategoriaValidator>();
             services.AddTransient<IValidator<FuncoesViewModel>, FuncoesViewModelValidator>();
             services.AddTransient<IValidator<RegistroViewModel>, RegistroViewModelValidator>();
             services.AddTransient<IValidator<LoginViewModel>, LoginViewModelValidator>();
+            services.AddTransient<IValidator<Cartao>, CartaoValidator>();
+            services.AddTransient<IValidator<Despesa>, DespesaValidator>();
 
             //Fazer a ligação front -> back da aplicação
             services.AddCors();
+            
 
 
             services.AddSpaStaticFiles(diretorio => {
@@ -68,7 +75,7 @@ namespace ControleFinanceiro.API
             });
 
 
-            var key = Encoding.ASCII.GetBytes(Settings.ChaveSecreta);
+             var key = Encoding.ASCII.GetBytes(Settings.ChaveSecreta);
 
             services.AddAuthentication(opcoes => {
                                                 // Para usar o token JWT é necessario baixar o pacote Microsoft.AspNetCore.Authentication.JwtBearer
@@ -118,15 +125,15 @@ namespace ControleFinanceiro.API
 
             app.UseRouting();
 
+             //Configurar o CORS
+            app.UseCors(opcoes => {
+                opcoes.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+            });
+
             // Authentication tem que vir sempre antes do Authorization senao, nao funciona
             app.UseAuthentication();
 
             app.UseAuthorization();
-
-            //Configurar o CORS
-            app.UseCors(opcoes => {
-                opcoes.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
-            });
 
             app.UseStaticFiles();
 
@@ -140,6 +147,12 @@ namespace ControleFinanceiro.API
             //Configurar a SPA
             app.UseSpa( spa => {
                 spa.Options.SourcePath = Path.Combine(Directory.GetCurrentDirectory(), "front/ControleFinanceiro");
+
+
+                if (env.IsDevelopment())
+                {
+                    spa.UseProxyToSpaDevelopmentServer($"http://localhost:4200/");
+                }
             });
         }
     }

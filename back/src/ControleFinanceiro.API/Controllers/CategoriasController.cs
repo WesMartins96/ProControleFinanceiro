@@ -24,7 +24,7 @@ namespace ControleFinanceiro.API.Controllers
 
 
         //Pegar dados
-        [Authorize(Roles = "Administrador")]
+        
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Categoria>>> GetCategorias()
         {
@@ -32,7 +32,7 @@ namespace ControleFinanceiro.API.Controllers
         }
 
         //Pegar pelo id
-        [Authorize(Roles = "Administrador")]
+        
         [HttpGet("{id}")]
         public async Task<ActionResult<Categoria>> GetCategoria(int id)
         {
@@ -46,7 +46,7 @@ namespace ControleFinanceiro.API.Controllers
         }
 
         //Atualizar registros
-        [Authorize(Roles = "Administrador")]
+        
         [HttpPut("{id}")]
         public async Task<IActionResult> PutCategoria(int id, Categoria categoria)
         {
@@ -68,7 +68,7 @@ namespace ControleFinanceiro.API.Controllers
         }
 
         //Inserir Registros no Banco de dados
-        [Authorize(Roles = "Administrador")]
+        
         [HttpPost]
         public async Task<ActionResult<Categoria>> PostCategoria(Categoria categoria)
         {
@@ -86,7 +86,7 @@ namespace ControleFinanceiro.API.Controllers
         }
 
         //Deletar Registros
-        [Authorize(Roles = "Administrador")]
+        
         [HttpDelete("{id}")]
         public async Task<ActionResult<Categoria>> DeleteCategoria(int id)
         {
@@ -104,9 +104,16 @@ namespace ControleFinanceiro.API.Controllers
         }
 
         // Filtrar a lista de categoria
-        [Authorize(Roles = "Administrador")]
+        
         [HttpGet("FiltrarCategorias/{nomeCategoria}")]
         public async Task<ActionResult<IEnumerable<Categoria>>> FiltrarCategorias(string nomeCategoria)
+        {
+            return await _categoriaRepositorio.FiltrarCategorias(nomeCategoria).ToListAsync();
+        }
+
+
+        [HttpGet("FiltrarCategoriasDespesas")]
+        public async Task<ActionResult<IEnumerable<Categoria>>> FiltrarCategoriasDespesas(string nomeCategoria)
         {
             return await _categoriaRepositorio.FiltrarCategorias(nomeCategoria).ToListAsync();
         }

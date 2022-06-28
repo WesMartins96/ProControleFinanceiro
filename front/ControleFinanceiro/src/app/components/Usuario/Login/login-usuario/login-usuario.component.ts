@@ -31,41 +31,32 @@ export class LoginUsuarioComponent implements OnInit {
   }
 
 
-  EnviarFormulario(): void{
+  EnviarFormulario(): void {
     this.erros = [];
-
     const dadosLogin = this.formulario.value;
 
-    this.usuariosService.LogarUsuario(dadosLogin).subscribe(resultado => {
-      // criar variavel para armazenar o email do usuario logado
-      const emailUsuarioLogado = resultado.emailUsuarioLogado;
-      const usuarioId = resultado.usuarioId;
-
-      const tokenUsuarioLogado = resultado.tokenUsuarioLogado;
-
-      //armazenar no local storage
-      localStorage.setItem("EmailUsuarioLogado", emailUsuarioLogado);
-      localStorage.setItem("UsuarioId", usuarioId);
-
-      localStorage.setItem("TokenUsuarioLogado", tokenUsuarioLogado);
-      console.log(tokenUsuarioLogado);
-
-      this.router.navigate(['/categorias/listagemcategorias']);
-    },
-    (err) => {
-      if(err.status === 400){
-        for(const campo in err.error.errors){
-          if(err.error.errors.hasOwnProperty(campo)){
-            this.erros.push(err.error.errors[campo]);
+    this.usuariosService.LogarUsuario(dadosLogin).subscribe(
+      (resultado) => {
+        const emailUsuarioLogado = resultado.emailUsuarioLogado;
+        const usuarioId = resultado.usuarioId;
+        const tokenUsuarioLogado = resultado.tokenUsuarioLogado;
+        localStorage.setItem('EmailUsuarioLogado', emailUsuarioLogado);
+        localStorage.setItem('UsuarioId', usuarioId);
+        localStorage.setItem('TokenUsuarioLogado', tokenUsuarioLogado);
+        this.router.navigate(['cartoes/listagemcartoes']);
+      },
+      (err) => {
+        if (err.status === 400) {
+          for (const campo in err.error.errors) {
+            if (err.error.errors.hasOwnProperty(campo)) {
+              this.erros.push(err.error.errors[campo]);
+            }
           }
+        } else {
+          this.erros.push(err.error);
         }
       }
-      // se for outro erro alem do 400
-      else
-      {
-        this.erros.push(err.error);
-      }
-    });
+    );
   }
 
 }
